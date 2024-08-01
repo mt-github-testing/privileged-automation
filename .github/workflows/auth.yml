@@ -13,6 +13,8 @@ on:
 jobs:
 
   Auth-Hello:
+
+    # Note that setting this (Copilots idea) doesn't result in any changes to the subject  
     env:
       OIDC_SUBJECT: "repo:${{ github.repository }}:workflow:build"
       
@@ -21,6 +23,8 @@ jobs:
       - run: echo Hello from the Auth Workflow.
 
       - name: OIDC Login
+        env:
+          OIDC_SUBJECT: "repo:${{ github.repository }}:workflow:build"
         uses: azure/login@v1
         with:
           audience: api://AzureADTokenExchange-demo
