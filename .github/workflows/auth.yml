@@ -1,1 +1,11 @@
+name: Auth WF
 
+on:
+  workflow_call:
+
+jobs:
+
+  Auth-Hello:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo Hello from the Auth Workflow.
