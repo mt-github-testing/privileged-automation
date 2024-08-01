@@ -13,6 +13,9 @@ on:
 jobs:
 
   Auth-Hello:
+    env:
+      OIDC_SUBJECT: "repo:${{ github.repository }}:workflow:build"
+      
     runs-on: ubuntu-latest
     steps:
       - run: echo Hello from the Auth Workflow.
