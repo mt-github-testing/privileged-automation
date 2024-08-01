@@ -15,16 +15,19 @@ jobs:
   Auth-Hello:
 
     # Note that setting this (Copilots idea) doesn't result in any changes to the subject  
-    env:
-      OIDC_SUBJECT: "repo:${{ github.repository }}:workflow:build"
+    # env:
+    #   OIDC_SUBJECT: "repo:${{ github.repository }}:workflow:build"
       
     runs-on: ubuntu-latest
     steps:
       - run: echo Hello from the Auth Workflow.
 
       - name: OIDC Login
-        env:
-          OIDC_SUBJECT: "repo:${{ github.repository }}:workflow:build"
+       
+        # Note that setting this (Copilots idea) doesn't result in any changes to the subject either
+        # env:
+        #   OIDC_SUBJECT: "repo:${{ github.repository }}:workflow:build"
+          
         uses: azure/login@v1
         with:
           audience: api://AzureADTokenExchange-demo
