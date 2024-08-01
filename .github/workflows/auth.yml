@@ -2,15 +2,12 @@ name: Auth WF
 
 on:
   workflow_call:
-    inputs:
+    secrets:
       AZURE_CLIENT_ID:
-        type: string
         required: true
       AZURE_TENANT_ID:
-        type: string
         required: true
       AZURE_SUBSCRIPTION_ID:
-        type: string
         required: true
 
 jobs:
@@ -34,9 +31,9 @@ jobs:
         uses: azure/login@v1
         with:
           audience: api://AzureADTokenExchange-demo
-          client-id: ${{ inputs.AZURE_CLIENT_ID }}
-          tenant-id: ${{ inputs.AZURE_TENANT_ID }}
-          subscription-id: ${{ inputs.AZURE_SUBSCRIPTION_ID }} 
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }} 
 
       - name: 'Run Azure CLI command'
         run: |
