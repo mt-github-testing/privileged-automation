@@ -22,11 +22,13 @@ jobs:
     steps:
       - run: echo Hello from the Auth Workflow.
 
-      - name: Get repository Name
-        run: echo "REPO_NAME=${{ github.repository }}" >> $GITHUB_ENV
-
-      - name: Extract first 4 characters
-        run: echo "REPO_OWNER=${REPO_NAME:0:4}" >> $GITHUB_ENV
+      - name: Get repository name
+        id: extract
+        run: |
+          REPO_NAME=${{ github.repository }}
+          REPO_PREFIX=${REPO_NAME:0:4}
+          echo "REPO_PREFIX=${REPO_PREFIX}" >> $GITHUB_ENV
+          echo "::set-output name=repo_prefix::${REPO_PREFIX}"
 
       - name: OIDC Login
        
@@ -36,7 +38,7 @@ jobs:
           
         uses: azure/login@v1
         with:
-          audience: api://AzureADTokenExchange-${REPO_OWNER}
+          audience: api://AzureADTokenExchange-${{ steps.extract.outputs.repo_prefix }}
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }} 
