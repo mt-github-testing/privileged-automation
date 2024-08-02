@@ -1,4 +1,4 @@
-name: Auth WF
+name: Auth & Get Secret WF
 
 on:
   workflow_call:
@@ -12,20 +12,23 @@ on:
 
 jobs:
 
-  Auth-Hello:
+  Privileged-WF-Hello:
 
     runs-on: ubuntu-latest
     steps:
-      - run: echo Hello from the Auth Workflow.
+      - run: echo Hello from the Auth & Get Secret Workflow.
 
+  Get-Sectet:
+    runs-on: ubuntu-latest
+    steps:
+    
       - name: Get repository prefix
         run: |
           REPO_NAME=${{ github.event.repository.name }}
           REPO_PREFIX=${REPO_NAME:0:3}
           echo "REPO_PREFIX=${REPO_PREFIX}" >> $GITHUB_ENV
-
+          
       - name: OIDC Login
-       
         uses: azure/login@v1
         with:
           audience: api://AzureADTokenExchange-${{ env.REPO_PREFIX }}
@@ -37,3 +40,15 @@ jobs:
         run: |
           az account show
           pwd
+
+      - name: Get Secret
+        uses: Azure/get-keyvault-secrets@v1
+        with:
+          keyvault: "github-oidc-test-kv"
+          secrets: 'example-secret'
+        id: kvSecretStep
+        
+      - name: Use Secret
+        run: echo "Secret obtaied (obfuscated):" ${{ steps.kvSecretStep.outputs.example-secret }}
+
+
