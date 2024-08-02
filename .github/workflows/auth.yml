@@ -14,28 +14,18 @@ jobs:
 
   Auth-Hello:
 
-    # Note that setting this (Copilots idea) doesn't result in any changes to the subject  
-    # env:
-    #   OIDC_SUBJECT: "repo:${{ github.repository }}:workflow:build"
-      
     runs-on: ubuntu-latest
     steps:
       - run: echo Hello from the Auth Workflow.
 
-      - name: Get repository name
-        id: extract
+      - name: Get repository prefix
         run: |
           REPO_NAME=${{ github.event.repository.name }}
           REPO_PREFIX=${REPO_NAME:0:3}
           echo "REPO_PREFIX=${REPO_PREFIX}" >> $GITHUB_ENV
-          # echo "repo_prefix=${REPO_PREFIX}" >> $GITHUB_OUTPUT
 
       - name: OIDC Login
        
-        # Note that setting this (Copilots idea) doesn't result in any changes to the subject either
-        # env:
-        #   OIDC_SUBJECT: "repo:${{ github.repository }}:workflow:build"
-          
         uses: azure/login@v1
         with:
           audience: api://AzureADTokenExchange-${{ env.REPO_PREFIX }}
