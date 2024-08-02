@@ -25,7 +25,7 @@ jobs:
       - name: Get repository name
         id: extract
         run: |
-          REPO_NAME=${{ github.repository }}
+          REPO_NAME=${{ github.event.repository.name }}
           REPO_PREFIX=${REPO_NAME:0:4}
           echo "REPO_PREFIX=${REPO_PREFIX}" >> $GITHUB_ENV
           echo "::set-output name=repo_prefix::${REPO_PREFIX}"
