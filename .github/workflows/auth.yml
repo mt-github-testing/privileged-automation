@@ -13,12 +13,11 @@ on:
 jobs:
 
   Privileged-WF-Hello:
-
     runs-on: ubuntu-latest
     steps:
-      - run: echo Hello from the Auth & Get Secret Workflow.
+      - run: echo "Hello from the Auth & Get Secret Workflow."
 
-  Get-Sectet:
+  Get-Secret:
     runs-on: ubuntu-latest
     steps:
     
