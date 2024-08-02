@@ -26,9 +26,9 @@ jobs:
         id: extract
         run: |
           REPO_NAME=${{ github.event.repository.name }}
-          REPO_PREFIX=${REPO_NAME:0:4}
+          REPO_PREFIX=${REPO_NAME:0:3}
           echo "REPO_PREFIX=${REPO_PREFIX}" >> $GITHUB_ENV
-          echo "repo_prefix=${REPO_PREFIX}" >> $GITHUB_OUTPUT
+          # echo "repo_prefix=${REPO_PREFIX}" >> $GITHUB_OUTPUT
 
       - name: OIDC Login
        
