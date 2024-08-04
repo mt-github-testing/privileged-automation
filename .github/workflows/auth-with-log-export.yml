@@ -1,0 +1,63 @@
+name: Auth & Get Secret WF
+
+on:
+  workflow_call:
+    secrets:
+      AZURE_CLIENT_ID:
+        required: true
+      AZURE_TENANT_ID:
+        required: true
+      AZURE_SUBSCRIPTION_ID:
+        required: true
+
+jobs:
+
+  Privileged-WF-Hello:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Hello from the Auth & Get Secret Workflow."
+
+  Get-Secret:
+    runs-on: ubuntu-latest
+    steps:
+    
+      - name: Get repository prefix
+        run: |
+          REPO_NAME=${{ github.event.repository.name }}
+          REPO_PREFIX=${REPO_NAME:0:3}
+          echo "REPO_PREFIX=${REPO_PREFIX}" >> $GITHUB_ENV
+          
+      - name: OIDC Login
+        uses: azure/login@v1
+        with:
+          audience: api://AzureADTokenExchange-${{ env.REPO_PREFIX }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }} 
+
+      - name: 'Run Azure CLI command'
+        run: |
+          az account show
+          pwd
+
+      - name: Get Secret
+        uses: Azure/get-keyvault-secrets@v1
+        with:
+          keyvault: "github-oidc-test-kv"
+          secrets: 'example-secret'
+        id: kvSecretStep
+        
+      - name: Use Secret
+        run: echo "Secret obtaied (obfuscated):" ${{ steps.kvSecretStep.outputs.example-secret }}
+
+      - name: Export-Log
+        uses: timorthi/export-workflow-logs@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
+          destination: blobstorage
+          azure-storage-account-name: githublogexport
+          azure-storage-account-key: sp=rcw&st=2024-08-04T09:52:29Z&se=2024-08-04T17:52:29Z&spr=https&sv=2022-11-02&sr=c&sig=YHHsh79JZR0wGFVXM4%2FcrPmLXDjzkVrKkTaQyTnuG2Y%3D
+          container-name: github-export
+          blob-name: test
+          
