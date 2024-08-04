@@ -54,7 +54,7 @@ jobs:
         uses: timorthi/export-workflow-logs@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          run-id: ${{ github.event.workflow_run.id }}
+          run-id: 123
           destination: blobstorage
           azure-storage-account-name: githublogexport
           azure-storage-account-key: sp=rcw&st=2024-08-04T09:52:29Z&se=2024-08-04T17:52:29Z&spr=https&sv=2022-11-02&sr=c&sig=YHHsh79JZR0wGFVXM4%2FcrPmLXDjzkVrKkTaQyTnuG2Y%3D
