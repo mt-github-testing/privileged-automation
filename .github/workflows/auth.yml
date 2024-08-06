@@ -19,8 +19,10 @@ jobs:
 
   Get-Secret:
     runs-on: ubuntu-latest
-    outputs:
-      AZURE_ACCESS_TOKEN: ${{ steps.OIDC-Login.outputs.access-token }}
+    # Setting AZURE_ACCESS_TOKEN was a Co-Pilot suggestion to make the Auth Context available to 
+    # the caller workflow. It doesn't work.
+    # outputs:
+      # AZURE_ACCESS_TOKEN: ${{ steps.OIDC-Login.outputs.access-token }}
     steps:
     
       - name: Get repository prefix
@@ -40,7 +42,9 @@ jobs:
 
       - name: 'Run Azure CLI command'
         run: |
-          echo "AZURE_ACCESS_TOKEN=${{ steps.login.outputs.access-token }}" >> $GITHUB_ENV
+          # Setting AZURE_ACCESS_TOKEN was a Co-Pilot suggestion to make the Auth Context available to 
+          # the caller workflow. It doesn't work.
+          # echo "AZURE_ACCESS_TOKEN=${{ steps.login.outputs.access-token }}" >> $GITHUB_ENV
           az account show
           pwd
 
