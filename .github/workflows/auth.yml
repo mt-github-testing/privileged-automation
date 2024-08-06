@@ -19,6 +19,8 @@ jobs:
 
   Get-Secret:
     runs-on: ubuntu-latest
+    outputs:
+      AZURE_ACCESS_TOKEN: ${{ steps.OIDC-Login.outputs.access-token }}
     steps:
     
       - name: Get repository prefix
@@ -28,6 +30,7 @@ jobs:
           echo "REPO_PREFIX=${REPO_PREFIX}" >> $GITHUB_ENV
           
       - name: OIDC Login
+        id: login
         uses: azure/login@v1
         with:
           audience: api://AzureADTokenExchange-${{ env.REPO_PREFIX }}
@@ -37,6 +40,7 @@ jobs:
 
       - name: 'Run Azure CLI command'
         run: |
+          echo "AZURE_ACCESS_TOKEN=${{ steps.login.outputs.access-token }}" >> $GITHUB_ENV
           az account show
           pwd
 
